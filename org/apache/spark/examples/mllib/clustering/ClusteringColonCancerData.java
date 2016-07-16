@@ -32,14 +32,17 @@ public abstract class ClusteringColonCancerData {
 		// Initialize Spark configuration & context
 		SparkConf sparkConf = new SparkConf().setAppName(appName)
 				.setMaster("local[1]").set("spark.executor.memory", "1g");
+
 		JavaSparkContext sc = new JavaSparkContext(sparkConf);
 
+		// Read data file from Hadoop file system.
 		String path = "hdfs://localhost:9000/user/konur/COLRECT.txt";
 		
 		// Read the data file and return it as RDD of strings
 		JavaRDD<String> tempData = sc.textFile(path);		
 		
 		JavaRDD<Vector> data = tempData.map(mapFunction);
+		
 		data.cache();
 		
 		int numClusters = 5;
@@ -86,13 +89,15 @@ public abstract class ClusteringColonCancerData {
 		// For each data point in the cluster, the corresponding survival months will be a distinct element in the ArrayList<Integer>. 
 		Hashtable<Integer, ArrayList<Integer>> cl = new Hashtable<Integer, ArrayList<Integer>>();
 
-		int j = 0;
+
 		
-		// This key to this data structure is the identifier for a cluster center, one of  0, 1, 2, ..., #clusters - 1. The
+		// The key to this data structure is the identifier for a cluster center, one of  0, 1, 2, ..., #clusters - 1. The
 		// value is a data structure storing the number of times a unique pair of 'stage group' and 'regional nodes positive'
 		// is encountered.
 		Hashtable<Integer, Hashtable<java.util.Vector<Integer>, Integer>> clusteredPoints = 
 				new Hashtable<Integer, Hashtable<java.util.Vector<Integer>, Integer>>();
+		
+		int j = 0;
 
 		for (Integer i : collectedClusterIndexes) {
 			// This ArrayList<Integer> stores individual survival months for each data point.

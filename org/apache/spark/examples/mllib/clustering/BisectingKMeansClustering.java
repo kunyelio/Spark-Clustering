@@ -18,9 +18,9 @@ public class BisectingKMeansClustering extends ClusteringColonCancerData {
 	    BisectingKMeans bkm = new BisectingKMeans().setK(numClusters).setMaxIterations(numIterations);
 	    BisectingKMeansModel clusters = bkm.run(data);
 
-		// Evaluate clustering by computing Within Set Sum of Squared Errors
-		double WSSSE = clusters.computeCost(data.rdd());
-		System.out.println("Within Set Sum of Squared Errors = " + WSSSE);
+		// Evaluate clustering by computing WCSS
+		double WCSS = clusters.computeCost(data.rdd());
+		System.out.println("WCSS = " + WCSS);
 		
 		// Display cluster centers
 		Vector[] clusterCenters = clusters.clusterCenters();

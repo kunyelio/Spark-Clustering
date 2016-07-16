@@ -20,9 +20,9 @@ public class KMeansClustering extends ClusteringColonCancerData {
 		KMeansModel clusters = KMeans.train(data.rdd(), numClusters,
 				numIterations);
 
-		// Evaluate clustering by computing Within Set Sum of Squared Errors
-		double WSSSE = clusters.computeCost(data.rdd());
-		System.out.println("Within Set Sum of Squared Errors = " + WSSSE);
+		// Evaluate clustering by computing WCSS
+		double WCSS = clusters.computeCost(data.rdd());
+		System.out.println("WCSS = " + WCSS);
 
 		// Display cluster centers
 		Vector[] clusterCenters = clusters.clusterCenters();
